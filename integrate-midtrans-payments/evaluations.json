@@ -46,6 +46,34 @@
       ]
     },
     {
+      "id": "bisnap-implementation-depth",
+      "skills": ["integrate-midtrans-payments"],
+      "query": "Use integrate-midtrans-payments to implement BI-SNAP QRIS and virtual account in this app with our own payment UI. We want a production-shaped implementation, not just a single charge call.",
+      "expected_behavior": [
+        "Loads references/merchant-readiness-preflight.md, references/project-adaptation.md, and references/bisnap-core.md",
+        "Finds the merchant's order, payment, repository, environment, logging, and test boundaries before proposing code",
+        "Obtains a cached B2B access token using the clientId|timestamp RSA-SHA256 access-token signature, refreshes with an expiry buffer, and guards refresh races",
+        "Signs the transactional request as method:path:accessToken:bodyHashHex:timestamp with HMAC-SHA512 over the exact serialized body without reformatting",
+        "Moves the local payment attempt to creating_payment before the provider call and awaiting_payment after the charge is accepted",
+        "Persists provider reference, QR or VA instructions, expiry, and latest provider status for recovery after refresh",
+        "Maps BI-SNAP status codes through one shared idempotent, monotonic rule and reconciles on the merchant order id or trxId",
+        "Keeps private keys, client secret, access tokens, and signatures off the frontend"
+      ]
+    },
+    {
+      "id": "bisnap-notification-routing",
+      "skills": ["integrate-midtrans-payments"],
+      "query": "Use integrate-midtrans-payments to wire BI-SNAP notifications for QRIS, VA, and Direct Debit. Our dashboard lets us register callback URLs.",
+      "expected_behavior": [
+        "Uses product-specific standardized callback paths such as /v1.0/debit/notify, /v1.0/qr/notify, and /v1.0/va/notify rather than one merged route, and confirms exact paths against current docs",
+        "Verifies the notification signature over the exact request path POST:requestPath:bodyHashHex:timestamp with the Midtrans public key and warns that a path-rewriting dispatcher breaks verification",
+        "Returns the BI-SNAP-standard response envelope per product (VA 2002500 echoing virtualAccountData, QR 2005200, debit 2005600) instead of a generic 200 OK",
+        "Reads the raw body for verification, verifies before mutating, and gates any verification bypass to non-production only",
+        "Reads the per-product status field (additionalInfo.paymentFlagStatus for VA, latestTransactionStatus for QR and debit) and reconciles on the right key",
+        "Keeps notification handling idempotent and monotonic and redacts secrets, signatures, and full payloads from logs"
+      ]
+    },
+    {
       "id": "gopaylater-debug",
       "skills": ["integrate-midtrans-payments"],
       "query": "Our GoPayLater charge keeps failing after account linking. Use integrate-midtrans-payments to debug the implementation.",

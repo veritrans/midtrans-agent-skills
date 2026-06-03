@@ -173,6 +173,42 @@ Expected behavior:
 - Runs or proposes local deterministic checks: payload builders, signature fixtures, webhook replay, status mapping, idempotency, env wiring, redaction, and recovery pages.
 - Lists the exact sandbox evidence still required once credentials and dashboard access exist.
 
+## Scenario 12: BI-SNAP Implementation Depth
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to implement BI-SNAP QRIS and virtual account in this app with our own payment UI. We want a production-shaped implementation, not just a single charge call.
+```
+
+Expected behavior:
+
+- Loads `merchant-readiness-preflight.md`, `project-adaptation.md`, and `bisnap-core.md`.
+- Finds the merchant's order, payment, repository, environment, logging, and test boundaries before proposing code.
+- Obtains a cached B2B access token using the `clientId|timestamp` RSA-SHA256 access-token signature, refreshes with an expiry buffer, and guards refresh races.
+- Builds product payloads server-side, signs the transactional request as `method:path:accessToken:bodyHashHex:timestamp` (HMAC-SHA512), and signs the exact serialized body without reformatting.
+- Moves the local payment attempt to `creating_payment` before the provider call and `awaiting_payment` after the charge is accepted.
+- Persists provider reference, QR/VA instructions, expiry, and latest provider status for recovery after refresh.
+- Maps BI-SNAP status codes through one shared, idempotent, monotonic rule, and reconciles on the merchant order id / `trxId`.
+- Keeps private keys, client secret, access tokens, and signatures off the frontend.
+
+## Scenario 13: BI-SNAP Notification Routing And Signature
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to wire BI-SNAP notifications for QRIS, VA, and Direct Debit. Our dashboard lets us register callback URLs.
+```
+
+Expected behavior:
+
+- Uses product-specific standardized callback paths (for example `/v1.0/debit/notify`, `/v1.0/qr/notify`, `/v1.0/va/notify`) rather than one merged route, and confirms exact paths against current docs.
+- Verifies the notification signature over the exact request path (`POST:requestPath:bodyHashHex:timestamp`) using the Midtrans public key, and warns that a path-rewriting dispatcher breaks verification.
+- Returns the BI-SNAP-standard response envelope per product (for example VA `2002500` echoing `virtualAccountData`; QR `2005200`; debit `2005600`), not a generic `200 OK`.
+- Reads the raw body for verification, verifies before mutating, and gates any verification bypass to non-production only.
+- Reads the per-product status field (`additionalInfo.paymentFlagStatus` for VA; `latestTransactionStatus` for QR/debit) and reconciles on the right key.
+- Keeps notification handling idempotent and monotonic and redacts secrets, signatures, and full payloads from logs.
+
 ## Skill Quality Checklist
 
 - Does `SKILL.md` route before prescribing?
