@@ -21,6 +21,45 @@ Expected behavior:
 - Discusses popup/redirect/embed choice.
 - Handles `enabled_payments`, unique order id, integer gross amount, webhook signature, status 404 before method selection, and idempotent notifications.
 
+## Scenario 1A: Snap Implementation Depth
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to implement Snap checkout in this existing store. We want a production-shaped implementation, not just a token API call.
+```
+
+Expected behavior:
+
+- Loads `merchant-readiness-preflight.md`, `project-adaptation.md`, and `snap-checkout.md`.
+- Finds the merchant's current order, checkout, payment-attempt, webhook, repository, environment, logging, and test boundaries before proposing code.
+- Creates the Snap token server-side with Basic Auth, a unique provider order id, integer `gross_amount`, item-total reconciliation, validated `enabled_payments`, and explicit expiry behavior.
+- Moves the local payment attempt to `creating_payment` before the provider call and `awaiting_payment` after token creation succeeds.
+- Persists the Snap token or redirect URL, provider order id, selected local method or allowed method set, expiry, latest provider status, and safe metadata for recovery after refresh.
+- Chooses popup, redirect, or embedded Snap JS based on the merchant's UX and platform constraints.
+- Treats `onSuccess`, `onPending`, `onError`, and `onClose` as customer-experience hints only.
+- Verifies notifications with the raw payload amount string, maps transaction status monotonically, and keeps the handler idempotent.
+- Covers retry behavior, expired sessions, and the normal status-lookup not-found case before a customer selects or confirms a payment method.
+- Keeps server keys and provider payload logs off the frontend.
+
+## Scenario 1B: Snap Advanced Feature Review
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to extend our Snap checkout. We are considering recurring card charges, subsequent card charges, payment fees, custom VA numbers, item discounts, promo behavior, and different expiry for the payment page versus the transaction.
+```
+
+Expected behavior:
+
+- Does not implement every advanced option blindly; separates merchant need, dashboard activation, product eligibility, operational risk, and test evidence.
+- Maps each requested capability to the relevant Snap area: `expiry`, `page_expiry`, `enabled_payments`, `custom_field1-3`, callback URLs, card 3DS/security options, saved-card or subsequent-card behavior, recurring card behavior, installment or bank routing, custom VA number or description, item-level discounts, promo setup, and fee handling.
+- Identifies which features require dashboard or Midtrans support activation before code can be proven.
+- States the checkout-state, webhook, retry, refund, and reconciliation impact of each accepted feature.
+- Keeps card/customer payment data in backend-approved boundaries and avoids broadening PCI-sensitive handling.
+- Recommends feature flags or configuration gates for methods and advanced options that may differ between sandbox and production.
+- Produces a staged implementation and verification plan rather than mixing all advanced behavior into one untestable change.
+
 ## Scenario 2: Invoice Preflight
 
 Prompt:
