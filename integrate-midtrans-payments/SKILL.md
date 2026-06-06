@@ -1,6 +1,6 @@
 ---
 name: integrate-midtrans-payments
-description: "Use when working with Midtrans merchant payments: Snap, Core API, custom card UI, 3DS, saved card, one-click, OTC, Alfamart, Indomaret, legacy virtual account, BI-SNAP, QRIS, GoPay, GoPay tokenization, GoPayLater, Payment Link, refunds and partial refunds, payment callbacks, webhooks, signatures, status polling, sandbox testing, settlement state, go-live cutover, or AI-assisted payment gateway implementation."
+description: "Use for Midtrans: Snap, Core API, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions/recurring, refunds, card UI/3DS/saved cards, OTC, webhooks, signatures, status, sandbox, settlement, go-live, or agent integration."
 license: BSD-3-Clause
 ---
 
@@ -76,6 +76,7 @@ Load only the references relevant to the merchant's request:
 | BI-SNAP QRIS, VA, one-time Direct Debit, signatures, access tokens, notification dispatcher | [bisnap-core.md](references/bisnap-core.md) |
 | GoPay linking, tokenized wallet, GoPayLater, Binding Inquiry, account unlinking | [gopay-tokenization.md](references/gopay-tokenization.md) |
 | Payment Link via API or dashboard, invoice/chat collection, social commerce, no-code link sharing | [payment-links.md](references/payment-links.md) |
+| Subscription API, recurring card billing, saved-token recurring charges, recurring notification routing | [subscriptions.md](references/subscriptions.md) |
 | Classic Core API card/3DS/one-click/installment, OTC (Alfamart/Indomaret), legacy VA | [core-api-classic.md](references/core-api-classic.md) |
 | Cross-product runtime patterns and gotchas not covered above | [midtrans-runtime-patterns.md](references/midtrans-runtime-patterns.md) and current docs |
 | Issuing refunds (full or partial), `refund_key`/`partnerRefundNo` idempotency, BI-SNAP refund, refund webhook handling | [refund-operations.md](references/refund-operations.md) |
@@ -90,6 +91,8 @@ Load only the references relevant to the merchant's request:
 - **GoPay flows**: one-time GoPay Direct Debit, tokenized GoPay wallet payment, GoPayLater, account linking, and unlinking are **five different request shapes**. Tokenized payment additionally requires the `Authorization-Customer: Bearer <customer_authorization_token>` header that one-time payment must not send.
 - **Seamless data signing (GoPay linking)**: when current docs require a seamless signature, the data must be `encodeURIComponent(...)`-wrapped **before** RSA-SHA256 signing. Signing the raw string fails silently in sandbox.
 - **Refund idempotency**: pass `refund_key` (Snap/Core/Payment Link) or `partnerRefundNo` (BI-SNAP) on every refund call. A retried refund without an idempotency key creates a double refund.
+- **Subscription owner**: choose either Midtrans-managed Subscription API or merchant-driven recurring for a customer subscription. Running both creates duplicate scheduled charges.
+- **Recurring notifications**: recurring charges may use the dashboard Recurring Notification URL instead of the ordinary Payment Notification URL. Route and reconcile recurring charge attempts separately from one-time payments.
 
 ## Output Expectations
 

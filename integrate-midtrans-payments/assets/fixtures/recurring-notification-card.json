@@ -1,0 +1,22 @@
+{
+  "_comment": "Recurring card-payment notification from a Midtrans-managed subscription. signature_key generated with MIDTRANS_SERVER_KEY=SB-Mid-server-test. Use to verify that the merchant separates the Recurring Notification URL handler from the one-time Payment Notification URL handler, and that charge_attempts[] is keyed on order_id (which includes the period).",
+  "transaction_time": "2026-07-01 09:00:00",
+  "transaction_status": "settlement",
+  "transaction_id": "66666666-7777-8888-9999-aaaaaaaaaa01",
+  "subscription_id": "77777777-8888-9999-aaaa-bbbbbbbbbb01",
+  "status_message": "midtrans payment notification",
+  "status_code": "200",
+  "signature_key": "f43ba6958030a7d2d7b4ab9ed3a1c8ab4f89b57b1d608945667c61796c3c0791f20a54312303bc697069f91e8938dd910e21a5e3a40b3192b3d26681cf3e3979",
+  "settlement_time": "2026-07-01 09:00:30",
+  "payment_type": "credit_card",
+  "order_id": "ORDER-RECUR-2026-07-01-cust-0001",
+  "merchant_id": "G000000000",
+  "masked_card": "481111-1114",
+  "gross_amount": "150000.00",
+  "fraud_status": "accept",
+  "currency": "IDR",
+  "card_type": "credit",
+  "bank": "bni",
+  "approval_code": "1626140000123",
+  "metadata": { "merchant_subscription_id": "SUB-MERCH-0001" }
+}

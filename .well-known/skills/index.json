@@ -10,7 +10,7 @@
       "version": "0.2.3",
       "updated_at": "2026-05-29",
       "license": "BSD-3-Clause",
-      "description": "Use when working with Midtrans merchant payments: Snap, Core API, custom card UI, 3DS, saved card, one-click, OTC, Alfamart, Indomaret, legacy virtual account, BI-SNAP, QRIS, GoPay, GoPay tokenization, GoPayLater, Payment Link, refunds and partial refunds, payment callbacks, webhooks, signatures, status polling, sandbox testing, settlement state, go-live cutover, or AI-assisted payment gateway implementation.",
+      "description": "Use for Midtrans: Snap, Core API, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions/recurring, refunds, card UI/3DS/saved cards, OTC, webhooks, signatures, status, sandbox, settlement, go-live, or agent integration.",
       "path": "integrate-midtrans-payments/",
       "entry": "SKILL.md",
       "files": [
@@ -29,6 +29,7 @@
         "references/payment-links.md",
         "references/project-adaptation.md",
         "references/refund-operations.md",
+        "references/subscriptions.md",
         "references/sandbox-interaction-helper.md",
         "references/snap-checkout.md",
         "references/verification-playbook.md",
@@ -51,6 +52,7 @@
         "assets/fixtures/bisnap-debit-notification.json",
         "assets/fixtures/gopay-account-linking-notification.json",
         "assets/fixtures/payment-link-notification.json",
+        "assets/fixtures/recurring-notification-card.json",
         "assets/templates/env.example"
       ]
     }

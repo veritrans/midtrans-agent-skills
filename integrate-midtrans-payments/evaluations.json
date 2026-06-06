@@ -200,6 +200,21 @@
       ]
     },
     {
+      "id": "card-subscription-managed",
+      "skills": ["integrate-midtrans-payments"],
+      "query": "Use integrate-midtrans-payments to implement monthly card subscriptions. We want Midtrans to own the billing schedule and notify our app for every recurring charge.",
+      "expected_behavior": [
+        "Loads references/subscriptions.md",
+        "Routes to the Midtrans-managed Subscription API and warns explicitly that mixing it with merchant-driven recurring double-charges customers",
+        "Confirms subscription/recurring activation and Recurring Notification URL setup before implementation",
+        "Requires an initial successful save-card flow and persists saved_token_id plus saved_token_id_expired_at before creating the subscription",
+        "Creates the subscription with a unique name, string amount, schedule, metadata.merchant_subscription_id, and retry_schedule aligned with merchant dunning policy",
+        "Stores the returned subscription id and maintains charge_attempts[] keyed by recurring charge order_id",
+        "Verifies recurring notifications with the Snap/Core SHA-512 signature and maps each charge attempt idempotently",
+        "Separates disable, enable, cancel, and update semantics in operator workflows"
+      ]
+    },
+    {
       "id": "refund-partial-idempotent",
       "skills": ["integrate-midtrans-payments"],
       "query": "Use integrate-midtrans-payments to add a partial refund flow for our settled GoPay orders. The customer support tool may double-click the refund button.",

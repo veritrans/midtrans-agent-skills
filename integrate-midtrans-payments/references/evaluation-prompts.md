@@ -304,6 +304,25 @@ Expected behavior:
 - Reuses Snap/Core notification signature verification and idempotent status mapping.
 - Avoids BI-SNAP QRIS/VA request shapes for this classic Core API path.
 
+## Scenario 17: Managed Card Subscription
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to implement monthly card subscriptions. We want Midtrans to own the billing schedule and notify our app for every recurring charge.
+```
+
+Expected behavior:
+
+- Loads `subscriptions.md`, plus merchant readiness and project adaptation references.
+- Chooses one recurring owner: Midtrans-managed Subscription API, not a merchant cron running parallel charges.
+- Confirms recurring/subscription merchant activation and Recurring Notification URL setup.
+- Requires an initial successful save-card flow and persists `saved_token_id` plus expiry before creating the subscription.
+- Creates subscriptions with unique `name`, string `amount`, schedule, metadata, and retry policy aligned with merchant dunning.
+- Stores the returned subscription id and keeps a `charge_attempts[]` ledger keyed by recurring charge order id.
+- Verifies recurring charge notifications with the Snap/Core signature formula and maps each attempt idempotently.
+- Separates disable/resume/cancel semantics for operator workflows.
+
 ## Skill Quality Checklist
 
 - Does `SKILL.md` route before prescribing?
