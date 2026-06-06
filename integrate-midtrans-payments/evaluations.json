@@ -198,6 +198,21 @@
         "Runs local deterministic checks: payload builders, signature unit tests with known fixtures, webhook replay against local handler, status mapping, idempotency, env wiring, redaction, and recovery pages",
         "Lists the exact sandbox evidence still required once credentials and dashboard access exist"
       ]
+    },
+    {
+      "id": "refund-partial-idempotent",
+      "skills": ["integrate-midtrans-payments"],
+      "query": "Use integrate-midtrans-payments to add a partial refund flow for our settled GoPay orders. The customer support tool may double-click the refund button.",
+      "expected_behavior": [
+        "Loads references/refund-operations.md",
+        "Routes to direct refund endpoint (POST /v2/{order_id}/refund/online/direct) for GoPay, not async refund",
+        "Generates a deterministic refund_key per refund attempt (e.g., {order_id}-refund-{counter}) and persists it before the API call",
+        "Takes a row-level lock or optimistic-concurrency token on the order before issuing the refund",
+        "Maintains a total_refunded ledger and rejects refund attempts that would exceed gross_amount",
+        "Restricts the refund action to orders in transaction_status in {settlement, partial_refund, capture}",
+        "Handles the partial_refund webhook and reconciles to the local ledger keyed on refund_key",
+        "Does not assume a non-refundable method (e.g., some OTC) supports refund"
+      ]
     }
   ]
 }

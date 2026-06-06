@@ -1,0 +1,18 @@
+{
+  "_comment": "Snap full-refund notification (Midtrans sandbox shape). signature_key is generated with MIDTRANS_SERVER_KEY=SB-Mid-server-test for deterministic local checks. Use to verify the merchant handler transitions a paid order to refunded exactly once and updates the local refund ledger.",
+  "transaction_time": "2026-06-04 10:30:00",
+  "transaction_status": "refund",
+  "transaction_id": "22222222-3333-4444-5555-666666666601",
+  "status_message": "midtrans payment notification",
+  "status_code": "200",
+  "signature_key": "066b9923b82f27ba2aaa61bdea78133dcf3d442709a678c86dda29c6656c4cb9d11995e4357e074694e3da2e8d0e25d5afe0578df9f35d85a0365c197387d525",
+  "settlement_time": "2026-06-04 10:30:15",
+  "refund_amount": "150000.00",
+  "refund_key": "merchant-refund-uuid-2026-06-04-001",
+  "payment_type": "credit_card",
+  "order_id": "ORDER-refund-0001",
+  "merchant_id": "G000000000",
+  "gross_amount": "150000.00",
+  "fraud_status": "accept",
+  "currency": "IDR"
+}

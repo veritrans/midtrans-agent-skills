@@ -1,0 +1,18 @@
+{
+  "_comment": "Snap partial-refund notification. signature_key generated with MIDTRANS_SERVER_KEY=SB-Mid-server-test. Use to verify the merchant handler increments the local refund ledger without regressing the order to fully refunded, and rejects subsequent refunds that would exceed gross_amount.",
+  "transaction_time": "2026-06-04 11:00:00",
+  "transaction_status": "partial_refund",
+  "transaction_id": "22222222-3333-4444-5555-666666666602",
+  "status_message": "midtrans payment notification",
+  "status_code": "200",
+  "signature_key": "d115a0f55a40f2c60465006118c1e48f52c3baf5a953f8443221d84dea9a9ebd7ba20f7c76d2320dfcdd31c3de41a047f6b43a4075bea5f734dd8c5231268906",
+  "settlement_time": "2026-06-04 11:00:20",
+  "refund_amount": "50000.00",
+  "refund_key": "merchant-refund-uuid-2026-06-04-002",
+  "payment_type": "gopay",
+  "order_id": "ORDER-partial-refund-0001",
+  "merchant_id": "G000000000",
+  "gross_amount": "150000.00",
+  "fraud_status": "accept",
+  "currency": "IDR"
+}

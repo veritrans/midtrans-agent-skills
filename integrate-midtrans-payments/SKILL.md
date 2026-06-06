@@ -1,6 +1,6 @@
 ---
 name: integrate-midtrans-payments
-description: "Use when working with Midtrans merchant payments: Snap, Core API, BI-SNAP, QRIS, virtual account, GoPay, GoPay tokenization, GoPayLater, payment callbacks, webhooks, signatures, status polling, sandbox testing, settlement state, go-live cutover, or AI-assisted payment gateway implementation."
+description: "Use when working with Midtrans merchant payments: Snap, Core API, BI-SNAP, QRIS, virtual account, GoPay, GoPay tokenization, GoPayLater, refunds and partial refunds, payment callbacks, webhooks, signatures, status polling, sandbox testing, settlement state, go-live cutover, or AI-assisted payment gateway implementation."
 license: BSD-3-Clause
 ---
 
@@ -53,9 +53,9 @@ Use current Midtrans docs each time. Search `https://docs.midtrans.com/llms.txt`
    - Return 2xx only after safely accepting the callback or deliberately storing it for later reconciliation.
 
 7. **Instrument and verify**
-   - Add structured logs for payment creation, provider responses, callbacks, status polling, account linking, cancellation, and reconciliation.
+   - Add structured logs for payment creation, provider responses, callbacks, status polling, account linking, cancellation, refund, and reconciliation.
    - Redact secrets, signatures, authorization headers, tokens, customer PII, and full provider payloads unless explicitly allowlisted.
-   - Cover status mapping, signature generation/verification, idempotent callback handling, expired payments, disabled methods, and env/deployment drift.
+   - Cover status mapping, signature generation/verification, idempotent callback handling, expired payments, disabled methods, refund flows, and env/deployment drift.
    - See [verification-playbook.md](references/verification-playbook.md).
    - When the user asks to prove the integration in sandbox, replay a webhook, poll status, run a smoke test, or diagnose sandbox behavior, read [sandbox-interaction-helper.md](references/sandbox-interaction-helper.md).
 
@@ -76,6 +76,7 @@ Load only the references relevant to the merchant's request:
 | BI-SNAP QRIS, VA, one-time Direct Debit, signatures, access tokens, notification dispatcher | [bisnap-core.md](references/bisnap-core.md) |
 | GoPay linking, tokenized wallet, GoPayLater, Binding Inquiry, account unlinking | [gopay-tokenization.md](references/gopay-tokenization.md) |
 | Classic Core API custom card/direct API paths, or any cross-product runtime pattern not covered above | [midtrans-runtime-patterns.md](references/midtrans-runtime-patterns.md) and current docs |
+| Issuing refunds (full or partial), `refund_key`/`partnerRefundNo` idempotency, BI-SNAP refund, refund webhook handling | [refund-operations.md](references/refund-operations.md) |
 | Sandbox/live cutover, callbacks, logging, secrets, smoke tests, production readiness | [operations-and-go-live.md](references/operations-and-go-live.md) |
 | Sandbox interaction, smoke tests, webhook replay, status polling, BI-SNAP signing dry-runs, credential-safe test commands | [sandbox-interaction-helper.md](references/sandbox-interaction-helper.md) and [scripts/README.md](scripts/README.md) |
 | Improving this skill or checking whether an agent follows it correctly | [evaluation-prompts.md](references/evaluation-prompts.md) and [evaluations.json](evaluations.json) |
@@ -86,6 +87,7 @@ Load only the references relevant to the merchant's request:
 - **BI-SNAP signatures**: three independent helpers — access-token (asymmetric RSA-SHA256), transaction (HMAC-SHA512 over `method:path:accessToken:bodyHashHex:timestamp`), notification (verify with Midtrans public key over `POST:path:bodyHashHex:timestamp`). Never share one helper across the three.
 - **GoPay flows**: one-time GoPay Direct Debit, tokenized GoPay wallet payment, GoPayLater, account linking, and unlinking are **five different request shapes**. Tokenized payment additionally requires the `Authorization-Customer: Bearer <customer_authorization_token>` header that one-time payment must not send.
 - **Seamless data signing (GoPay linking)**: when current docs require a seamless signature, the data must be `encodeURIComponent(...)`-wrapped **before** RSA-SHA256 signing. Signing the raw string fails silently in sandbox.
+- **Refund idempotency**: pass `refund_key` (Snap/Core/Payment Link) or `partnerRefundNo` (BI-SNAP) on every refund call. A retried refund without an idempotency key creates a double refund.
 
 ## Output Expectations
 
