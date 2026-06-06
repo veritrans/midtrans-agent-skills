@@ -10,7 +10,7 @@
       "version": "0.2.3",
       "updated_at": "2026-05-29",
       "license": "BSD-3-Clause",
-      "description": "Use for Midtrans: Snap, Core API, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions/recurring, refunds, card UI/3DS/saved cards, OTC, webhooks, signatures, status, sandbox, settlement, go-live, or agent integration.",
+      "description": "Use for Midtrans: Snap/mobile, Core, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions, refunds, webhooks, sandbox.",
       "path": "integrate-midtrans-payments/",
       "entry": "SKILL.md",
       "files": [
@@ -43,6 +43,7 @@
         "scripts/dry_run_bisnap_sign.py",
         "scripts/format_partner_service_id.sh",
         "scripts/bisnap_timestamp.py",
+        "scripts/print_midtrans_webhook_ips.sh",
         "assets/fixtures/snap-notification-settlement.json",
         "assets/fixtures/snap-notification-pending.json",
         "assets/fixtures/snap-notification-expire.json",

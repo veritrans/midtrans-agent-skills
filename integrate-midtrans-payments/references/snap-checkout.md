@@ -93,6 +93,29 @@ Generate `expiry.start_time` at request time in `yyyy-MM-dd HH:mm:ss +0700`; it 
 
 Do not paste a real customer email, real phone number, server key, client key, or full provider response into examples, logs, tickets, or chat.
 
+## Per-Transaction Notification Routing
+
+Snap exposes two HTTP request headers for token creation that change webhook delivery for that single transaction:
+
+| Header | Effect |
+| --- | --- |
+| `X-Override-Notification: <url>` | Replaces dashboard Payment Notification URL for this transaction only |
+| `X-Append-Notification: <url1>,<url2>` | Adds extra notification URLs (up to 3) on top of the dashboard URL |
+
+Use cases:
+
+- Multi-tenant SaaS where each tenant has its own webhook handler.
+- Migration window when a new handler is being validated alongside the legacy handler.
+- Per-product routing when a single account serves multiple distinct workloads.
+
+Constraints:
+
+- Both headers accept comma-separated URLs and require HTTPS in production.
+- Override silently replaces the dashboard URL for that one transaction; if the override is unreachable, the notification is lost (Midtrans does not fall back to the dashboard URL).
+- Each appended URL receives the same payload independently; merchant handlers must remain idempotent across all of them.
+
+Treat these headers as advanced features. Default to the dashboard URL unless one of the use cases above applies.
+
 ## Snap State Model
 
 Every Snap implementation needs a local state model. At minimum, agents should look for or create equivalents of:
@@ -147,6 +170,8 @@ Frontend callbacks are UX hints only:
 `window.snap.hide()` can close a popup programmatically, but local cancellation still needs provider/state reconciliation.
 
 If the page uses Content Security Policy, check current Snap JS and asset domains in the docs and add only the required script/connect/frame/image allowances.
+
+For mobile apps (Android, iOS, Flutter, React Native), Snap is typically embedded via WebView with deeplink return for e-wallet app-switch flows. See [mobile-sdk.md](mobile-sdk.md).
 
 ## Webhook And Status Handling
 

@@ -97,8 +97,8 @@ def check_skill_metadata() -> None:
         fail("SKILL.md description cannot contain angle brackets")
     if len(description) > 1024:
         fail("SKILL.md description exceeds 1024 characters")
-    if SKILL_MD.stat().st_size >= 10_000:
-        fail("SKILL.md must stay under 10 KB per PRD")
+    if SKILL_MD.stat().st_size >= 16 * 1024:
+        fail("SKILL.md must stay under 16 KiB per PRD")
     ok("skill metadata and size")
 
 

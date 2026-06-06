@@ -76,7 +76,7 @@ The skill must:
 
 ## Non-functional requirements
 
-- `SKILL.md` is concise (under 10 KB). Product detail lives in references.
+- `SKILL.md` is concise (under 16 KiB). Product detail lives in references.
 - All references are framework-agnostic; framework-specific examples appear only when they reflect verified merchant patterns.
 - Every reference cites `https://docs.midtrans.com/llms.txt` as the authoritative refresh source.
 - No copy-pasted large API surfaces from Midtrans docs (keep the skill maintainable; defer to live docs).

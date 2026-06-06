@@ -1,6 +1,6 @@
 ---
 name: integrate-midtrans-payments
-description: "Use for Midtrans: Snap/mobile, Core, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions, refunds, card UI/3DS, OTC, webhooks, sandbox."
+description: "Use for Midtrans: Snap/mobile, Core, BI-SNAP, QRIS, VA, GoPay, Payment Link, subscriptions, refunds, webhooks, sandbox."
 license: BSD-3-Clause
 ---
 
@@ -40,6 +40,7 @@ Use current Midtrans docs each time. Search `https://docs.midtrans.com/llms.txt`
    - Make callbacks idempotent and monotonic: never let late `pending` or `cancelled` callbacks overwrite paid/fulfilled/refunded states.
 
 5. **Build provider clients server-side**
+   - Prefer official Midtrans libraries when one fits the merchant stack; a thin wrapper still owns env wiring, retry, logging, and payment state.
    - Keep Midtrans keys, signatures, access tokens, customer authorization tokens, and provider payload signing on the backend.
    - For Snap/Core API, use Basic Auth with server key and blank password.
    - For BI-SNAP, keep access-token, transactional, and notification signatures separate.

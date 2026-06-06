@@ -343,6 +343,24 @@ Expected behavior:
 - Treats finish/unfinish/error/wallet return as UX hints, then verifies payment status through the backend or webhook.
 - Tests on real Android and iOS devices for wallet app-switch, unknown URL schemes, and cold-start recovery.
 
+## Scenario 19: Production Webhooks Never Arrive
+
+Prompt:
+
+```text
+Use integrate-midtrans-payments to debug why Midtrans production webhooks never arrive. Sandbox webhooks worked. curl to our endpoint succeeds.
+```
+
+Expected behavior:
+
+- Loads `operations-and-go-live.md` before changing webhook code.
+- Checks whether the production edge endpoint accepts TLS 1.2 instead of requiring TLS 1.3 only.
+- Suggests `openssl s_client -connect <host>:443 -tls1_2` against the exact dashboard notification hostname.
+- Checks strict firewall/WAF allowlists against current Midtrans notification source IPs/CIDRs using `print_midtrans_webhook_ips.sh`.
+- Warns that IP allowlists are not authenticity proof; signature verification is still required.
+- Confirms the Payment Notification URL is public HTTPS, has no auth/VPN/unusual port, and does not redirect before the handler.
+- Uses edge logs to distinguish TLS/WAF drops from application signature or status-mapping bugs.
+
 ## Skill Quality Checklist
 
 - Does `SKILL.md` route before prescribing?

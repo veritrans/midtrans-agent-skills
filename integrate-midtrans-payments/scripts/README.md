@@ -75,6 +75,7 @@ We do not recommend installing it system-wide.
 | `dry_run_bisnap_sign.py` | Print every artifact (body hash, string-to-sign, headers) that a BI-SNAP request would carry, with secrets redacted | All of the above |
 | `format_partner_service_id.sh` | Format `partnerServiceId` to the 8-char left-space-padded shape | Padding rule from current Midtrans VA docs |
 | `bisnap_timestamp.py` | Emit an Asia/Jakarta `YYYY-MM-DDTHH:MM:SS+07:00` timestamp | Required by every BI-SNAP request |
+| `print_midtrans_webhook_ips.sh` | Print Midtrans notification source IPs/CIDRs for inbound firewall/WAF allowlists (production / sandbox plus legacy; labeled / nginx / csv) | Sourced from current Midtrans IP address docs; verify before applying |
 
 ## Typical use cases
 

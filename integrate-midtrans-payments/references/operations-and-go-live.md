@@ -42,6 +42,28 @@ Keep these concepts separate:
 - finish/unfinish/error redirects: customer browser UX,
 - GoPay/tokenization return URL: browser return and state validation.
 
+## TLS And Webhook Endpoint Compatibility
+
+Current notification docs state that Midtrans webhook delivery supports TLS up to version 1.2. A webhook endpoint hardened to TLS 1.3-only can pass ordinary browser or `curl` checks while Midtrans notifications fail to arrive.
+
+Resolution: keep TLS 1.2 enabled on webhook endpoints. Disable TLS 1.0/1.1, but do not require TLS 1.3 only. Verify from the edge hostname with:
+
+```bash
+openssl s_client -connect merchant.example:443 -tls1_2 < /dev/null 2>&1 | head -3
+```
+
+A non-zero exit means the endpoint refuses TLS 1.2 and should not be used as the dashboard notification URL.
+
+## Midtrans Source IP Allowlist
+
+If the merchant runs a strict ingress firewall or WAF, allow Midtrans notification source IPs/CIDRs. Use `scripts/print_midtrans_webhook_ips.sh` to print the current docs-derived production/sandbox and legacy lists in labeled, nginx, or CSV format:
+
+```bash
+./scripts/print_midtrans_webhook_ips.sh production --as nginx
+```
+
+Verify the list against `https://docs.midtrans.com/docs/ip-address` before applying production rules. IP allowlists are not proof of authenticity; webhook handlers still must verify signatures. Do not allowlist resolved IPs for outbound calls to Midtrans API domains; docs require domain-based allowlisting for API endpoints.
+
 ## Structured Logging
 
 Log enough to debug without leaking secrets:
@@ -107,12 +129,40 @@ For GoPay tokenization:
 - test missing/changed payment option token,
 - test PayLater unavailable path.
 
+For Subscriptions:
+
+- test create, disable, resume, cancel,
+- test first-charge tokenization failure,
+- test retry_schedule with sandbox-induced failure,
+- test Recurring Notification URL routes to the recurring handler, not the one-time handler.
+
+For Mobile (Snap WebView):
+
+- test on a real device (not just simulator) for at least one wallet (GoPay/ShopeePay),
+- test deeplink return when the app is foregrounded, backgrounded, and killed (cold-start),
+- test WebView intercept of the finish redirect dismisses the WebView and triggers backend status verification.
+
+For Payment Link:
+
+- test single-use link payment,
+- test reusable link with usage_limit > 1 (each buyer should land as a distinct transaction_id),
+- test expired link rejection.
+
+For Refunds:
+
+- test full refund (transaction_status: refund),
+- test partial refund and accumulating refunds against gross_amount,
+- test idempotent retry with the same refund_key (must not double-refund),
+- test refund on a non-refundable method (admin UI must reject before API call).
+
 ## Go-Live Checklist
 
 - Production credentials installed and sandbox credentials removed from production.
-- Production callback URLs configured in Midtrans dashboard.
+- Production callback URLs configured in Midtrans dashboard (Payment Notification URL plus Recurring Notification URL when subscriptions or recurring is in scope).
 - Payment methods activated in production account.
 - Feature flags match activation state.
+- Webhook endpoint accepts TLS 1.2; do not configure the notification URL as TLS-1.3-only.
+- Midtrans notification source IPs/CIDRs allowlisted on strict production firewall/WAF rules when required (see `scripts/print_midtrans_webhook_ips.sh`).
 - Logs visible in production runtime.
 - Alerting or dashboard exists for provider 4xx/5xx and webhook failures.
 - Refund/cancel/manual reconciliation runbook exists if those actions are supported.

@@ -216,6 +216,22 @@
       ]
     },
     {
+      "id": "webhook-tls12-edge-debug",
+      "skills": ["integrate-midtrans-payments"],
+      "query": "Use integrate-midtrans-payments to debug why Midtrans production webhooks never arrive. Sandbox webhooks worked. curl to our endpoint succeeds.",
+      "expected_behavior": [
+        "Loads references/operations-and-go-live.md",
+        "Checks whether the merchant webhook endpoint accepts TLS 1.2 instead of being hardened to TLS-1.3-only",
+        "Suggests openssl s_client -connect <host>:443 -tls1_2 to confirm TLS 1.2 acceptance at the edge hostname",
+        "Explains that current Midtrans notification docs say webhook delivery supports TLS up to 1.2, while ordinary curl/browser checks may negotiate TLS 1.3",
+        "Checks strict firewall/WAF allowlists against current Midtrans notification source IPs/CIDRs and points to scripts/print_midtrans_webhook_ips.sh",
+        "Warns that IP allowlists are not authenticity proof and the handler must still verify provider signatures",
+        "Distinguishes TLS/WAF failures from signature/payload bugs by checking edge logs before debugging application status mapping",
+        "Confirms the production Payment Notification URL is HTTPS, public, and not behind auth, VPN, unusual ports, or redirect chains"
+      ]
+    }
+,
+    {
       "id": "card-subscription-managed",
       "skills": ["integrate-midtrans-payments"],
       "query": "Use integrate-midtrans-payments to implement monthly card subscriptions. We want Midtrans to own the billing schedule and notify our app for every recurring charge.",
