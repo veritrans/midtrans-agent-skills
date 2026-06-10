@@ -102,10 +102,10 @@ The canonical skill source is the public GitHub repository, installable today:
 npx skills add https://github.com/veritrans/midtrans-agent-skills --yes
 ```
 
-`docs.midtrans.com` generates `https://docs.midtrans.com/llms.txt` from its published pages and does not serve repository files such as `/.well-known/skills/index.json`. Distribution therefore splits:
+`docs.midtrans.com` runs on ReadMe, which auto-generates `https://docs.midtrans.com/llms.txt` from published pages but cannot serve repository files such as `/.well-known/skills/index.json`. Distribution therefore splits:
 
 - The machine-readable catalog is served from the repository: `https://raw.githubusercontent.com/veritrans/midtrans-agent-skills/main/.well-known/skills/index.json`.
-- The docs site publishes a "Build on Midtrans with AI" page, maintained by the Midtrans docs owners outside this repository. Once published, the docs site lists it in `llms.txt` automatically, so agents reading Midtrans docs discover the skill organically.
+- The docs site publishes a "Build on Midtrans with AI" page (source: `docs/readme-io/agent-skills-page.md` in the repository). Once published, ReadMe lists it in `llms.txt` automatically, so agents reading Midtrans docs discover the skill organically.
 
 Publishing requirements:
 

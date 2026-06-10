@@ -86,11 +86,11 @@ Authoritative source of truth: [https://docs.midtrans.com/llms.txt](https://docs
 
 ## Hosted distribution
 
-`docs.midtrans.com` generates `llms.txt` from its published pages and does not serve repository files such as `/.well-known/skills/index.json`. Distribution therefore splits:
+`docs.midtrans.com` runs on ReadMe, which auto-generates `llms.txt` from published pages but cannot serve repository files such as `/.well-known/skills/index.json`. Distribution therefore splits:
 
 - **Canonical skill source**: this GitHub repository (installable today via `npx skills add`).
 - **Machine-readable catalog**: `https://raw.githubusercontent.com/veritrans/midtrans-agent-skills/main/.well-known/skills/index.json`.
-- **Docs discovery**: a "Build on Midtrans with AI" page on `docs.midtrans.com`, maintained by the Midtrans docs owners outside this repository. Once published, the docs site lists it in `llms.txt` automatically, so agents reading Midtrans docs find the skill organically.
+- **Docs discovery**: publish the "Build on Midtrans with AI" page from [docs/readme-io/agent-skills-page.md](docs/readme-io/agent-skills-page.md) on docs.midtrans.com. Once published, ReadMe lists it in `llms.txt` automatically, so agents reading Midtrans docs find the skill organically.
 
 Still planned but **not yet shipped**:
 
@@ -163,6 +163,7 @@ integrate-midtrans-payments/
     templates/env.example           # Midtrans env starter template
 .well-known/skills/index.json       # draft hosted catalog manifest
 docs/official-release-readiness.md  # publication and evidence gate
+docs/readme-io/agent-skills-page.md # ready-to-publish docs.midtrans.com page
 docs/doc-sync/doc-dependencies.json # reference-to-docs-page dependency map
 docs/doc-sync/doc-snapshot.json     # hashed docs snapshot for drift detection
 docs/github-actions/official-readiness.yml # CI readiness workflow template
