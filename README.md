@@ -114,8 +114,13 @@ integrate-midtrans-payments/
     merchant-readiness-preflight.md # merchant account, sandbox, flow, and proof preflight
     project-adaptation.md           # mandatory project inspection
     snap-checkout.md                # Snap playbook
+    mobile-sdk.md                   # mobile WebView and deeplink playbook
     bisnap-core.md                  # BI-SNAP playbook
     gopay-tokenization.md           # GoPay tokenization + GoPayLater
+    core-api-classic.md             # classic Core API playbook
+    payment-links.md                # Payment Link playbook
+    subscriptions.md                # Subscription API and recurring billing
+    refund-operations.md            # refund playbook
     midtrans-runtime-patterns.md    # cross-product runtime patterns
     operations-and-go-live.md       # callbacks, secrets, logs, smoke
     sandbox-interaction-helper.md   # safe sandbox commands and fallbacks
@@ -132,6 +137,7 @@ integrate-midtrans-payments/
     dry_run_bisnap_sign.py          # full BI-SNAP signing dry-run
     format_partner_service_id.sh    # 8-char left-padded VA partner id
     bisnap_timestamp.py             # Asia/Jakarta ISO-8601 timestamp
+    print_midtrans_webhook_ips.sh   # webhook source IP allowlist helper
   assets/
     fixtures/                       # redacted webhook payload shapes
     templates/env.example           # Midtrans env starter template

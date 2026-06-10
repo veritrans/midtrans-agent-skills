@@ -126,6 +126,25 @@ def check_versions_and_manifest() -> None:
     ok(f"catalog manifest and version {versions.pop()}")
 
 
+def check_layout_sync() -> None:
+    index = load_json(INDEX)
+    if not isinstance(index, dict):
+        fail("index must be a JSON object")
+    files = index["skills"][0].get("files", [])
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    portability = (SKILL / "references" / "agent-portability.md").read_text(encoding="utf-8")
+    problems = []
+    for rel in files:
+        base = rel.rsplit("/", 1)[-1]
+        if rel.startswith(("references/", "scripts/")) and base not in readme:
+            problems.append(f"README.md layout missing {rel}")
+        if base not in portability:
+            problems.append(f"agent-portability.md tree missing {rel}")
+    if problems:
+        fail("repository trees out of sync with catalog manifest: " + "; ".join(problems))
+    ok("README and agent-portability trees match catalog manifest")
+
+
 def check_license() -> None:
     if not LICENSE.is_file():
         fail("LICENSE is required")
@@ -338,6 +357,7 @@ def main() -> int:
 
     check_skill_metadata()
     check_versions_and_manifest()
+    check_layout_sync()
     check_license()
     check_json_files()
     check_evaluations()
